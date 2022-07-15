@@ -42,4 +42,50 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         .should('have.text', '')
 
     });
+
+    it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+        
+        cy.get('#firstName').type('Aline')
+        cy.get('#lastName').type('Rosa')
+        cy.get('#email').type('alinerosa_s@hotmail.com')
+        cy.get('#phone-checkbox').click()
+        cy.get('.phone-label-span').should('be.visible')
+        cy.get('#open-text-area').type('Lorem Ipsum is simply ', {delay:0 }) // Há a opção de criar uma variavel e armazenar o texto desejado, porém é uma boa usar pageobjects + cucumber
+        cy.get('.button').click()
+        cy.get('.error').should('be.visible')
+
+    });
+
+    it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
+        
+        cy.get('#firstName')
+        .type('Aline')
+        .should('have.value', 'Aline')
+        .clear().should('have.value', '')
+
+        cy.get('#lastName')
+        .type('Rosa')
+        .should('have.value', 'Rosa')
+        .clear().should('have.value', '')
+
+        cy.get('#email')
+        .type('alinerosa_s@hotmail.com')
+        .should('have.value', 'alinerosa_s@hotmail.com')
+        .clear().should('have.value', '')
+
+        cy.get('#phone')
+        .type('982648115')
+        .should('have.value', '982648115')
+        .clear().should('have.value', '')
+
+        cy.get('#phone-checkbox').click()
+        cy.get('.phone-label-span').should('be.visible')
+
+    });
+
+    it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+        
+        cy.get('.button').click()
+        cy.get('.error').should('be.visible')
+    });
 });
